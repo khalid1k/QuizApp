@@ -5,7 +5,7 @@ export default function Header() {
       <svg>
         <use href="../assets/react.svg"></use>
       </svg>
-      <h1>The React Quiz App</h1>
+      <h1 className="text-4xl font-bold text-center ">The React Quiz App</h1>
     </header>
   );
 }
