@@ -10,6 +10,7 @@ import Progress from "./components/Progress";
 import Finshed from "./components/Finshed";
 import Timer from "./components/Timer";
 
+const SECS_PER_QUESTIONS = 30;
 const initialState = {
   questions: [],
 
@@ -19,6 +20,7 @@ const initialState = {
   answer: null,
   points: 0,
   highScore: 0,
+  secondsRemaining: null,
 };
 
 function reducer(state, action) {
@@ -28,7 +30,9 @@ function reducer(state, action) {
     case "dataFailed":
       return { ...state, status: "error" };
     case "start":
-      return { ...state, status: "active" };
+      return { ...state, status: "active",
+        secondsRemaining: state.questions.length * SECS_PER_QUESTIONS, 
+       };
     case "newAnswer":
       const question = state.questions.at(state.index);
       return {
@@ -50,14 +54,19 @@ function reducer(state, action) {
     case 'restart':
       return {
         ...initialState, questions: state.questions, status: 'ready',
-      }
+      };
+    case 'tick':
+      return {
+        ...state, secondsRemaining: state.secondsRemaining - 1,
+        status: state.secondsRemaining === 0 ? "finished" : state.status,
+      };
     default:
       throw new Error("Action unknown");
   }
 }
 
 function App() {
-  const [{ questions, status, index, answer, points }, dispatch] = useReducer(
+  const [{ questions, status, index, answer, points, secondsRemaining, highScore }, dispatch] = useReducer(
     reducer,
     initialState
   );
@@ -95,7 +104,7 @@ function App() {
             dispatch={dispatch}
           />
           <div className="flex justify-between items-center">
-            <Timer/>
+            <Timer dispatch={dispatch} secondsRemaining={secondsRemaining}/>
           <NextButton dispatch={dispatch} answer={answer} index={index} numQuestions={numQuestions}/> 
           </div>
           </>

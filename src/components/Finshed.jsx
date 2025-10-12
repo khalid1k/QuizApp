@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function Finshed({points, maxPossiblePoints, highScore}) {
+export default function Finshed({points, maxPossiblePoints, highScore, dispatch}) {
     const percentage = (points / maxPossiblePoints) * 100;
     let emoji;
   if (percentage === 100) emoji = "🥇";
