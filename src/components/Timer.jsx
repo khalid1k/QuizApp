@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+// timer component
 
 export default function Timer() {
     useEffect(function() {
